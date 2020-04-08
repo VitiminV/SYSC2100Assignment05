@@ -107,7 +107,7 @@ public class BSTDictionary<S1, S2> implements Dictionary {
         }
         //Otherwise, we must be at the key we mean to delete.
         else {
-            BSTNode<Object, Sortable> newNode = recursivePopSmallest(currentNode, parentNode);
+            BSTNode<Object, Sortable> newNode = popSmallest(currentNode, parentNode);
             //if the key of currentNode is greater than the key of parentNode...
             if (currentNode.getKey().compareTo(parentNode.getKey()) > 0) {
                 //...replace parentNode's right child with newNode, and set newNode's children to currentNode's children.
@@ -144,25 +144,27 @@ public class BSTDictionary<S1, S2> implements Dictionary {
 
 
     /**
-     * Recursive function that finds the smallest Node down the tree from currentNode, removes it from the tree, and returns it.
+     * Function that finds the smallest Node down the tree from currentNode, removes it from the tree, and returns it.
      *
      * @param currentNode The currently considered Node.
      * @param parentNode  The parent of the currently considered Node.
      * @return  BSTNode   The smallest Node that was found.
      */
-    private BSTNode<Object, Sortable> recursivePopSmallest(BSTNode<Object, Sortable> currentNode, BSTNode<Object, Sortable> parentNode) {
-        if(currentNode.getLeft() != null) {
-            recursivePopSmallest(currentNode.getLeft(), currentNode);
+
+    private BSTNode<Object, Sortable> popSmallest(BSTNode<Object, Sortable> currentNode, BSTNode<Object, Sortable> parentNode) {
+        BSTNode<Object, Sortable> parentNodeRef = parentNode;
+        while(currentNode.getLeft() != null) {
+            currentNode = currentNode.getLeft();
+            parentNodeRef = parentNode;
+            parentNode = currentNode;
         }
-        if(parentNode == null) {
-            BSTNode<Object, Sortable> tempNode = currentNode;
-            currentNode = null;
-            return tempNode;
+        if(parentNodeRef == null) {
+            root = currentNode.getRight();
         }
         else {
-            parentNode.setLeft(null);
-            return currentNode;
+            parentNodeRef.setLeft(null);
         }
+        return currentNode;
     }
 
     @Override
@@ -188,7 +190,7 @@ public class BSTDictionary<S1, S2> implements Dictionary {
     @Override
     public void printTree() {
         while(root != null) {
-            System.out.print(recursivePopSmallest(root, null).getElement());
+            System.out.print(popSmallest(root, null).getElement());
         }
     }
 

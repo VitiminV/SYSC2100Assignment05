@@ -116,7 +116,7 @@ public class BSTDictionary<S1, S2> implements Dictionary {
                 newNode.setLeft(currentNode.getLeft());
             }
         }
-    }   
+    }
 
     /**
      * Recursive function that finds the maximum depth of the current tree.
